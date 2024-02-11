@@ -8,7 +8,7 @@ aScriptPath=${BASH_SOURCE%/*}; if [ -d "${aScriptPath}" ]; then cd "$aScriptPath
 aParties=$aScriptPath/../3rdparty/android
 
 if [ ! -x "$aParties/unpack.sh" ]; then
-  git clone --depth 1 https://github.com/gkv311/sview-deps-android.git $aParties
+  git clone --depth 1 https://github.com/ThreeDeeJay/sview-deps-android.git $aParties
 fi;
 
 # unpack archives and define variables
