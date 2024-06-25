@@ -1,7 +1,7 @@
 name: Build
 
 env:
-  Solution: .
+  Solution: sView.sln
   Platform: #Any CPU|Win32|x64
   Configuration: Release
   Artifacts: bin\WIN_vc_AMD64
