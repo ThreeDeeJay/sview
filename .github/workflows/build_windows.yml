@@ -21,9 +21,18 @@ jobs:
   Windows:
     runs-on: windows-2019
     steps:
+    - name: Clone repo and submodules
+      run: |
+        curl https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-full-shared.7z -o "ffmpeg.7z"
+        7z x "ffmpeg.7z"
+        ls -R
+        scoop install ffmpeg-shared
+        winget install "FFmpeg (Shared)" 
 
     - name: Clone repo and submodules
-      run: git clone --recurse-submodules https://github.com/${{github.repository}}.git . --branch ${{env.Branch}}
+      run: |
+        git clone --recurse-submodules https://github.com/${{github.repository}}.git . --branch ${{env.Branch}}
+        git clone --recurse-submodules https://github.com/${{github.repository}}.git ../../ffmpeg --branch ${{env.Branch}}
 
     - name: Get current date, commit hash and count
       run: |
