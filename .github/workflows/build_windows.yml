@@ -46,7 +46,7 @@ jobs:
       run: |
         continuousIntegration\prebuild_sview_wnt.bat
         nuget restore ${{env.Solution}}
-        msbuild ${{env.Solution}} /m /p:AdditionalIncludePaths="D:\a\sview\sview\ffmpeg-7.0.1-full_build-shared\include" /p:AdditionalLibraryDirectories="D:\a\sview\sview\ffmpeg-7.0.1-full_build-shared\lib"
+        msbuild ${{env.Solution}} /m /p:LibPath="D:\a\sview\sview\3rdparty\wnt\ffmpeg-4.1.1-x86_64-w64-mingw32-lgpl\lib" p:AdditionalLibraryDirectories="D:\a\sview\sview\3rdparty\wnt\ffmpeg-4.1.1-x86_64-w64-mingw32-lgpl\lib"
 
     - name: Upload Installer Artifact to GitHub
       uses: actions/upload-artifact@v2
