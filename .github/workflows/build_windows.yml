@@ -34,6 +34,10 @@ jobs:
         echo "CommitCount=$(git rev-list --count ${{env.Branch}})" >> $env:GITHUB_ENV
 
     - name: Set up FFMPEG
+      run: sudo apt-get install g++ libgtk2.0-dev libopenal-dev libgl1-mesa-dev libavcodec-dev libavdevice-dev libavformat-dev libavutil-dev libswscale-dev libconfig++-dev libconfig-dev libxpm-dev codeblocks
+      shell: bash
+
+    - name: Set up FFMPEG
       run: |
         Invoke-WebRequest -Method Get -Uri https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-full-shared.7z -OutFile ffmpeg.7z -UseBasicParsing
         7z x "ffmpeg.7z"
@@ -53,12 +57,13 @@ jobs:
         
     - name: Build
       run: |
-        cd "D:\a\sview\sview\ffmpeg-7.0.1-full_build-shared\lib"
+        cd "D:\a\sview\sview\3rdparty\wnt\ffmpeg-4.1.1-x86_64-w64-mingw32-lgpl\lib"
+        ls -R
         msbuild "${{github.workspace}}\${{env.Solution}}" /m 
 #/p:LibPath="D:\a\sview\sview\3rdparty\lib\WIN_vc_AMD64" /p:AdditionalLibraryDirectories="D:\a\sview\sview\3rdparty\lib\WIN_vc_AMD64"
-#pip3 install av==6.2.0
 #/p:LibPath="D:\a\sview\sview\3rdparty\wnt\ffmpeg-4.1.1-x86_64-w64-mingw32-lgpl\lib"
 #/p:AdditionalLibraryDirectories="D:\a\sview\sview\3rdparty\wnt\ffmpeg-4.1.1-x86_64-w64-mingw32-lgpl\lib"
+#pip3 install av==6.2.0
 
     - name: Upload Installer Artifact to GitHub
       uses: actions/upload-artifact@v2
