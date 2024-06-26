@@ -37,6 +37,12 @@ jobs:
       run: |
         Invoke-WebRequest -Method Get -Uri https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-full-shared.7z -OutFile ffmpeg.7z -UseBasicParsing
         7z x "ffmpeg.7z"
+        
+        $env:PATH += ";D:\a\sview\sview\ffmpeg-7.0.1-full_build-shared\lib"
+        $env:PATH += ";D:\a\sview\sview\3rdparty\wnt\ffmpeg-4.1.1-x86_64-w64-mingw32-lgpl\lib"
+        $env:PATH += ";D:\a\sview\sview\3rdparty\wnt\ffmpeg-4.1.1-x86_64-w64-mingw32-lgpl\lib_gcc"
+        $env:PATH += ";D:\a\sview\sview\3rdparty\lib\WIN_vc_AMD64"
+        $env:PATH += ";D:\a\sview\sview\3rdparty\lib\WIN_vc_AMD64_DEBUG"
 
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v1.0.2
@@ -48,7 +54,8 @@ jobs:
         
     - name: Build
       run: |
-        msbuild ${{env.Solution}} /m /p:LibPath="D:\a\sview\sview\3rdparty\lib\WIN_vc_AMD64" /p:AdditionalLibraryDirectories="D:\a\sview\sview\3rdparty\lib\WIN_vc_AMD64"
+        msbuild ${{env.Solution}} /m 
+#/p:LibPath="D:\a\sview\sview\3rdparty\lib\WIN_vc_AMD64" /p:AdditionalLibraryDirectories="D:\a\sview\sview\3rdparty\lib\WIN_vc_AMD64"
 #pip3 install av==6.2.0
 #/p:LibPath="D:\a\sview\sview\3rdparty\wnt\ffmpeg-4.1.1-x86_64-w64-mingw32-lgpl\lib"
 #/p:AdditionalLibraryDirectories="D:\a\sview\sview\3rdparty\wnt\ffmpeg-4.1.1-x86_64-w64-mingw32-lgpl\lib"
