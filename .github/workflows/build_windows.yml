@@ -45,7 +45,7 @@ jobs:
     - name: Build
       run: |
         continuousIntegration\prebuild_sview_wnt.bat
-        msbuild ${{env.Solution}} /m /p:AdditionalLibraryDirectories="D:\a\sview\sview\3rdparty\wnt\ffmpeg-4.1.1-x86_64-w64-mingw32-lgpl\lib"
+        msbuild ${{env.Solution}} /m /p:LibPath="D:\a\sview\sview\3rdparty\wnt\ffmpeg-4.1.1-x86_64-w64-mingw32-lgpl\lib"
 
 #/p:LibPath="D:\a\sview\sview\3rdparty\wnt\ffmpeg-4.1.1-x86_64-w64-mingw32-lgpl\lib"
 #/p:AdditionalLibraryDirectories="D:\a\sview\sview\3rdparty\wnt\ffmpeg-4.1.1-x86_64-w64-mingw32-lgpl\lib"
