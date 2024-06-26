@@ -584,7 +584,7 @@ bool StImageLoader::loadImage(const StHandle<StFileNode>& theSource,
         ST_DEBUG_LOG(anImageFileR->getState());
     }
 #endif
-
+    deghost(1.0f, anImageL, anImageR);
     // finally push image data in Texture Queue
     myTextureQueue->setConnectedStream(true);
 
@@ -828,4 +828,72 @@ void StImageLoader::mainLoop() {
             }
         }
     }
+}
+
+
+static void deghost(float gf, StHandle<StImage> anImageL, StHandle<StImage> anImageR)
+{
+  int w = anImageL->getSizeX()/2, h = anImageL->getSizeY();
+
+  if(anImageL->getColorModel() != StImage::ImgColor_RGB) return;
+
+  GLubyte *idata_l = anImageL->changePlane(0).changeData();
+  GLubyte *idata_r = idata_l;
+    
+  //LUK: SBS jpeg or mpo ?
+  if(!anImageR->isNull()) {
+    assert(2*w == anImageR->getSizeX() && h == anImageR->getSizeY());
+    w = anImageR->getSizeX();
+    idata_r = anImageR->changePlane(0).changeData();
+    //printf("LUK: %d %d %d\n", anImageR->getColorModel(), anImageR->getSizeX(),  anImageR->getSizeY());
+  }
+  
+  int idxl, idxr;  
+  for(int j=0; j<h; j++) 
+    for(int i=0; i<w; i++) {
+
+      if(!anImageR->isNull()) {  //mpo
+    idxl = j*3*w + 3*i;
+    idxr = idxl;
+      }      
+      else { //jpeg
+    idxl = j*6*w + 3*i;
+    idxr = idxl + 3*w;
+      }
+
+      //rgb to gray scale
+      float xlg = 0.299f*idata_l[idxl] + 0.587f*idata_l[idxl+1] + 0.114f*idata_l[idxl+2];      
+      float xrg = 0.299f*idata_r[idxr] + 0.587f*idata_r[idxr+1] + 0.114f*idata_r[idxr+2];
+
+#if 1  
+      //const float ghosting = 0.13f;
+      float fac = fabsf(xlg-xrg);
+      const float ghosting = gf*fac/(2000.0f+xlg+xrg);
+#else  
+      int w = ilGetInteger(IL_IMAGE_WIDTH);
+      int h = ilGetInteger(IL_IMAGE_HEIGHT);
+      float fac = idxr/(3.0f*w*h);
+      //const float ghosting = 0.1f + 0.05f*(1.0f-fac);
+      const float ghosting = 0.05f + 0.05f*fac;
+#endif
+
+      //for each r,g,b channel
+      for(int k=0; k<3; k++) {
+    int rl=idata_l[idxl+k], rr = idata_r[idxr+k];
+    //int xl = rl + rr*ghosting;
+    //int xr = rr + rl*ghosting;
+    int xl = (1.0f+ghosting)*rl + rr*ghosting;
+    int xr = (1.0f+ghosting)*rr + rl*ghosting;    
+    if(xl < 0) xl = 0; else if (xl > 254) xl = 255;
+    if(xr < 0) xr = 0; else if (xr > 254) xr = 255;
+    
+    if(xlg - xrg > 20)
+      idata_l[idxl+k] = xl;
+    
+    if(xrg - xlg > 20)
+      idata_r[idxr+k] = xr; 
+      }
+  
+    }
+  
 }
