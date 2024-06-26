@@ -37,7 +37,6 @@ jobs:
       run: |
         Invoke-WebRequest -Method Get -Uri https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-full-shared.7z -OutFile ffmpeg.7z -UseBasicParsing
         7z x "ffmpeg.7z"
-        
         $env:PATH += ";D:\a\sview\sview\ffmpeg-7.0.1-full_build-shared\lib"
         $env:PATH += ";D:\a\sview\sview\3rdparty\wnt\ffmpeg-4.1.1-x86_64-w64-mingw32-lgpl\lib"
         $env:PATH += ";D:\a\sview\sview\3rdparty\wnt\ffmpeg-4.1.1-x86_64-w64-mingw32-lgpl\lib_gcc"
@@ -54,7 +53,8 @@ jobs:
         
     - name: Build
       run: |
-        msbuild ${{env.Solution}} /m 
+        cd "D:\a\sview\sview\ffmpeg-7.0.1-full_build-shared\lib"
+        msbuild "${{github.workspace}}\${{env.Solution}}" /m 
 #/p:LibPath="D:\a\sview\sview\3rdparty\lib\WIN_vc_AMD64" /p:AdditionalLibraryDirectories="D:\a\sview\sview\3rdparty\lib\WIN_vc_AMD64"
 #pip3 install av==6.2.0
 #/p:LibPath="D:\a\sview\sview\3rdparty\wnt\ffmpeg-4.1.1-x86_64-w64-mingw32-lgpl\lib"
