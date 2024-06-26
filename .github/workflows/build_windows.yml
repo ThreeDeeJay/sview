@@ -34,10 +34,6 @@ jobs:
         echo "CommitCount=$(git rev-list --count ${{env.Branch}})" >> $env:GITHUB_ENV
 
     - name: Set up FFMPEG
-      run: sudo apt-get install g++ libgtk2.0-dev libopenal-dev libgl1-mesa-dev libavcodec-dev libavdevice-dev libavformat-dev libavutil-dev libswscale-dev libconfig++-dev libconfig-dev libxpm-dev codeblocks
-      shell: bash
-
-    - name: Set up FFMPEG
       run: |
         Invoke-WebRequest -Method Get -Uri https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-full-shared.7z -OutFile ffmpeg.7z -UseBasicParsing
         7z x "ffmpeg.7z"
