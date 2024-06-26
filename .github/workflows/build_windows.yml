@@ -21,11 +21,6 @@ jobs:
   Windows:
     runs-on: windows-2019
     steps:
-    - name: Clone repo and submodules
-      run: |
-        Invoke-WebRequest -Method Get -Uri https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-full-shared.7z -OutFile ffmpeg.7z -UseBasicParsing
-        7z x "ffmpeg.7z"
-        ls -R
 
     - name: Clone repo and submodules
       run: |
@@ -37,6 +32,12 @@ jobs:
         echo "CommitDate=$(git show -s --date=format:'%Y-%m-%d' --format=%cd)" >> $env:GITHUB_ENV
         echo "CommitHashShort=$(git rev-parse --short=7 HEAD)" >> $env:GITHUB_ENV
         echo "CommitCount=$(git rev-list --count ${{env.Branch}})" >> $env:GITHUB_ENV
+
+    - name: Set up FFMPEG
+      run: |
+        Invoke-WebRequest -Method Get -Uri https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-full-shared.7z -OutFile ffmpeg.7z -UseBasicParsing
+        7z x "ffmpeg.7z"
+        ls -R
 
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v1.0.2
